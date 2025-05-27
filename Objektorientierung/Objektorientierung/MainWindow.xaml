@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Objektorientierung"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
+    <StackPanel Orientation="Horizontal">
+        <StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10">
             <Label Width="100">Länge</Label>
             <TextBox x:Name="tbxLaenge" Width="100"></TextBox>
@@ -19,5 +20,10 @@
         <Button Margin="10" Width="100" Click="btnSpeichern_Click">Speichern</Button>
             <ListView x:Name="lstRechtecke" SelectionChanged="lstRechtecke_SelectionChanged" Height="200" Width="200" Margin="10"></ListView>
         </StackPanel>
+        
+    </StackPanel>
+        <Canvas Background="AliceBlue" Width="200" Height="200" x:Name="myCanvas">
+
+        </Canvas>
     </StackPanel>
 </Window>

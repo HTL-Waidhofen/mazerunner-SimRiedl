@@ -20,14 +20,19 @@ namespace Objektorientierung
         public double laenge = 1;
         public double breite = 2;
 
+        public double position_x = 0;
+        public double position_y = 0;
+
         public double FlaecheBerechnen()
         {
             return laenge * breite;
         }
-        public Rechteck(double laenge, double breite)
+        public Rechteck(double laenge, double breite, double position_x, double position_y)
         { 
             this.laenge = laenge;
             this.breite = breite;
+            this.position_x = position_x;
+            this.position_y = position_y;
         }
         public override string ToString()
         {
@@ -45,6 +50,11 @@ namespace Objektorientierung
         public MainWindow()
         {
             InitializeComponent();
+
+            Button button = new Button();
+            button.Width = 100;
+            button.Content = "Click mich";
+            //myCanvas.Children.Add(button);
         }
 
         private void btnSpeichern_Click(object sender, RoutedEventArgs e)
@@ -61,14 +71,28 @@ namespace Objektorientierung
                     r.laenge = laenge;
                     r.breite = breite;
                     //nächstes mal weiter
-                    List<Rechteck> temp = rechtecke;
                     lstRechtecke.Items.Refresh();
+
+                    Rectangle rectangle = new Rectangle();
+                    rectangle.Width = laenge;
+                    rectangle.Height = breite;
+                    rectangle.StrokeThickness = 2;
+                    rectangle.Stroke = Brushes.Black;
+
+                    myCanvas.Children.Add(rectangle);
                 }
                 else
                 {
                     Rechteck r = new Rechteck(laenge, breite);
                     lstRechtecke.Items.Add(r);
                     rechtecke.Add(r);
+
+                    Rectangle rectangle = new Rectangle();
+                    rectangle.Width = laenge;
+                    rectangle.Height = breite;
+                    rectangle.StrokeThickness = 2;
+                    rectangle.Stroke = Brushes.Black;
+                    myCanvas.Children.Add(rectangle);
                 }
                 tbxLaenge.Clear();
                 tbxBreite.Clear();
