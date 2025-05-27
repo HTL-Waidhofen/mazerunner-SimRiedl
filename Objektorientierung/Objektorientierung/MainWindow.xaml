@@ -16,14 +16,26 @@
             <Label Width="100">Breite</Label>
             <TextBox x:Name="tbxBreite" Width="100"></TextBox>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Label Width="100">Abstand x</Label>
+                <TextBox x:Name="tbxPosx" Width="100"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Label Width="100">Abstand y</Label>
+                <TextBox x:Name="tbxPosy" Width="100"></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left">
         <Button Margin="10" Width="100" Click="btnSpeichern_Click">Speichern</Button>
             <ListView x:Name="lstRechtecke" SelectionChanged="lstRechtecke_SelectionChanged" Height="200" Width="200" Margin="10"></ListView>
         </StackPanel>
         
     </StackPanel>
-        <Canvas Background="AliceBlue" Width="200" Height="200" x:Name="myCanvas">
+        <StackPanel>
+        <Canvas Background="AliceBlue" Width="200" Height="200" Margin="10" x:Name="myCanvas">
 
         </Canvas>
+            <Button Margin="10" Click="Zeichnen_Click" >Rechtecke zeichnen</Button>
+            <Button Margin="10" Click="Loeschen_Click">Rechtecke löschen</Button>
+        </StackPanel>
     </StackPanel>
 </Window>

@@ -65,6 +65,10 @@ namespace Objektorientierung
                 double laenge = double.Parse(laengeStr);
                 string breiteStr = this.tbxBreite.Text;
                 double breite = double.Parse(breiteStr);
+                string position_xStr = this.tbxPosx.Text;
+                double position_x = double.Parse(position_xStr);
+                string position_yStr = this.tbxPosy.Text;
+                double position_y = double.Parse(position_yStr);
                 if (lstRechtecke.SelectedItem != null)
                 {
                     Rechteck r = (Rechteck)this.lstRechtecke.SelectedItem;
@@ -72,7 +76,7 @@ namespace Objektorientierung
                     r.breite = breite;
                     //nächstes mal weiter
                     lstRechtecke.Items.Refresh();
-
+                    /*
                     Rectangle rectangle = new Rectangle();
                     rectangle.Width = laenge;
                     rectangle.Height = breite;
@@ -80,19 +84,21 @@ namespace Objektorientierung
                     rectangle.Stroke = Brushes.Black;
 
                     myCanvas.Children.Add(rectangle);
+                    */
                 }
                 else
                 {
-                    Rechteck r = new Rechteck(laenge, breite);
+                    Rechteck r = new Rechteck(laenge, breite, position_x, position_y);
                     lstRechtecke.Items.Add(r);
                     rechtecke.Add(r);
-
+                    /*
                     Rectangle rectangle = new Rectangle();
                     rectangle.Width = laenge;
                     rectangle.Height = breite;
                     rectangle.StrokeThickness = 2;
                     rectangle.Stroke = Brushes.Black;
                     myCanvas.Children.Add(rectangle);
+                    */
                 }
                 tbxLaenge.Clear();
                 tbxBreite.Clear();
@@ -112,6 +118,25 @@ namespace Objektorientierung
                 tbxBreite.Text = r.breite.ToString();
             }
             catch (NullReferenceException) {}
+        }
+
+        private void Zeichnen_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < rechtecke.Count; i++)
+            {
+                Rectangle rectangle = new Rectangle();
+                rectangle.Width = rechtecke[i].laenge;
+                rectangle.Height = rechtecke[i].breite;
+                
+                rectangle.StrokeThickness = 2;
+                rectangle.Stroke = Brushes.Black;
+                myCanvas.Children.Add(rectangle);
+            }
+        }
+
+        private void Loeschen_Click(object sender, RoutedEventArgs e)
+        {
+            myCanvas.Children.Clear();
         }
     }
 }
