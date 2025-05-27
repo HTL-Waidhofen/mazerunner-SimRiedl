@@ -61,6 +61,8 @@ namespace Objektorientierung
                     r.laenge = laenge;
                     r.breite = breite;
                     //nächstes mal weiter
+                    List<Rechteck> temp = rechtecke;
+                    lstRechtecke.Items.Refresh();
                 }
                 else
                 {
@@ -80,8 +82,12 @@ namespace Objektorientierung
         private void lstRechtecke_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Rechteck r = (Rechteck)this.lstRechtecke.SelectedItem;
-            tbxLaenge.Text = r.laenge.ToString();
-            tbxBreite.Text = r.breite.ToString();
+            try
+            {
+                tbxLaenge.Text = r.laenge.ToString();
+                tbxBreite.Text = r.breite.ToString();
+            }
+            catch (NullReferenceException) {}
         }
     }
 }
