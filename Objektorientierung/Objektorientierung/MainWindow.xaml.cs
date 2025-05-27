@@ -127,9 +127,10 @@ namespace Objektorientierung
                 Rectangle rectangle = new Rectangle();
                 rectangle.Width = rechtecke[i].laenge;
                 rectangle.Height = rechtecke[i].breite;
-                
                 rectangle.StrokeThickness = 2;
                 rectangle.Stroke = Brushes.Black;
+                Canvas.SetTop(myCanvas, rechtecke[i].position_x);
+                Canvas.SetLeft(myCanvas, rechtecke[i].position_y); //hier nächstes mal weiter programmieren (Positionierung funktioniert nicht)
                 myCanvas.Children.Add(rectangle);
             }
         }
