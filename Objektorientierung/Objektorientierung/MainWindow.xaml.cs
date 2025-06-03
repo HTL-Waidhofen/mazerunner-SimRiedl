@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Objektorientierung
         }
         public override string ToString()
         {
-            return $"rechteck: {laenge}x{breite}";
+            return $"rechteck: {laenge}x{breite} ({position_x}|{position_y})";
         }
     }
 
@@ -55,6 +56,22 @@ namespace Objektorientierung
             button.Width = 100;
             button.Content = "Click mich";
             //myCanvas.Children.Add(button);
+
+            StreamReader reader = new StreamReader("wallsList.txt");
+            string wallsList = reader.ReadToEnd();
+            string[] walls = wallsList.Split('\n');
+            for (int i = 0; i < walls.Length; i++)
+            {
+                int x = (int.Parse(walls[i].Split(',')[0]))*10;
+                int y = (int.Parse(walls[i].Split(',')[1]))*10;
+
+                Rechteck r = new Rechteck(10, 10, x, y);
+                rechtecke.Add(r);
+                lstRechtecke.Items.Add(r);
+
+            }
+            
+
         }
 
         private void btnSpeichern_Click(object sender, RoutedEventArgs e)
@@ -74,31 +91,13 @@ namespace Objektorientierung
                     Rechteck r = (Rechteck)this.lstRechtecke.SelectedItem;
                     r.laenge = laenge;
                     r.breite = breite;
-                    //nächstes mal weiter
                     lstRechtecke.Items.Refresh();
-                    /*
-                    Rectangle rectangle = new Rectangle();
-                    rectangle.Width = laenge;
-                    rectangle.Height = breite;
-                    rectangle.StrokeThickness = 2;
-                    rectangle.Stroke = Brushes.Black;
-
-                    myCanvas.Children.Add(rectangle);
-                    */
                 }
                 else
                 {
                     Rechteck r = new Rechteck(laenge, breite, position_x, position_y);
                     lstRechtecke.Items.Add(r);
                     rechtecke.Add(r);
-                    /*
-                    Rectangle rectangle = new Rectangle();
-                    rectangle.Width = laenge;
-                    rectangle.Height = breite;
-                    rectangle.StrokeThickness = 2;
-                    rectangle.Stroke = Brushes.Black;
-                    myCanvas.Children.Add(rectangle);
-                    */
                 }
                 tbxLaenge.Clear();
                 tbxBreite.Clear();
@@ -129,8 +128,8 @@ namespace Objektorientierung
                 rectangle.Height = rechtecke[i].breite;
                 rectangle.StrokeThickness = 2;
                 rectangle.Stroke = Brushes.Black;
-                Canvas.SetTop(myCanvas, rechtecke[i].position_x);
-                Canvas.SetLeft(myCanvas, rechtecke[i].position_y); //hier nächstes mal weiter programmieren (Positionierung funktioniert nicht)
+                Canvas.SetTop(rectangle, rechtecke[i].position_x);
+                Canvas.SetLeft(rectangle, rechtecke[i].position_y); //hier nächstes mal weiter programmieren (Positionierung funktioniert nicht)
                 myCanvas.Children.Add(rectangle);
             }
         }
