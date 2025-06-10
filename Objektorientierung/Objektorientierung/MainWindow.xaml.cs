@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
 
 namespace Objektorientierung
 {
@@ -46,18 +49,23 @@ namespace Objektorientierung
         public int x;
         public int y;
         public Image image;
+        public MainWindow.Direction direction = MainWindow.Direction.None;
 
         public Spieler()
         {
             x = 1;
             y = 1;
         }
-        public void Move(Key key)
+        public void SetDirection(MainWindow.Direction direction)
+        { 
+            this .direction = direction;
+        }
+        public void Move()
         {
-            if (key == Key.Left) x--;
-            else if (key == Key.Right) x++;
-            else if (key == Key.Up) y--;
-            else if (key == Key.Down) y++;
+            if (direction == MainWindow.Direction.Left) x--;
+            else if (direction == MainWindow.Direction.Right) x++;
+            else if (direction == MainWindow.Direction.Up) y--;
+            else if (direction == MainWindow.Direction.Down) y++;
             Canvas.SetLeft(image, x * MainWindow.GRID_SIZE);
             Canvas.SetTop(image, y * MainWindow.GRID_SIZE);
         }
@@ -68,6 +76,9 @@ namespace Objektorientierung
     /// </summary>
     public partial class MainWindow : Window
     {
+        public enum Direction {  Up, Down, Left, Right, None }
+        DispatcherTimer timer = null;
+        
         public static int GRID_SIZE = 20;
         List<Rechteck> rechtecke = new List<Rechteck>();
         Spieler spieler = new Spieler();
@@ -75,6 +86,8 @@ namespace Objektorientierung
         public MainWindow()
         {
             InitializeComponent();
+
+            
 
             Button button = new Button();
             button.Width = 100;
@@ -94,6 +107,10 @@ namespace Objektorientierung
                 lstRechtecke.Items.Add(r);
             }
 
+        }
+        private void Update(object sender, EventArgs e)
+        {
+            spieler.Move();
         }
 
         private void btnSpeichern_Click(object sender, RoutedEventArgs e)
@@ -166,6 +183,31 @@ namespace Objektorientierung
             Canvas.SetLeft(spieler.image, spieler.x*GRID_SIZE);
             myCanvas.Children.Add(spieler.image);
         }
+        private void Zeichnen()
+        {
+            for (int i = 0; i < rechtecke.Count; i++)
+            {
+                Rectangle rectangle = new Rectangle();
+                rectangle.Width = rechtecke[i].laenge;
+                rectangle.Height = rechtecke[i].breite;
+                rectangle.StrokeThickness = 2;
+                rectangle.Stroke = Brushes.Black;
+                Canvas.SetTop(rectangle, rechtecke[i].position_x);
+                Canvas.SetLeft(rectangle, rechtecke[i].position_y);
+                myCanvas.Children.Add(rectangle);
+            }
+            spieler.image = new Image();
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri("spieler.jpeg", UriKind.Relative);
+            bitmap.EndInit();
+            spieler.image.Source = bitmap;
+            spieler.image.Width = GRID_SIZE;
+            spieler.image.Height = GRID_SIZE;
+            Canvas.SetTop(spieler.image, spieler.y * GRID_SIZE);
+            Canvas.SetLeft(spieler.image, spieler.x * GRID_SIZE);
+            myCanvas.Children.Add(spieler.image);
+        }
 
         private void Loeschen_Click(object sender, RoutedEventArgs e)
         {
@@ -174,13 +216,28 @@ namespace Objektorientierung
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            spieler.Move(e.Key);
+            if(e.Key == Key.Left) spieler.SetDirection(Direction.Left);
+            else if(e.Key == Key.Right) spieler.SetDirection(Direction.Right);
+            else if (e.Key == Key.Up) spieler.SetDirection(Direction.Up);
+            else if (e.Key == Key.Down) spieler.SetDirection(Direction.Down);
+            /*
+            if (e.Key == Key.Left) direction = 3;
+            else if (e.Key == Key.Right) direction = 1;
+            else if (e.Key == Key.Up) direction = 4;
+            else if (e.Key == Key.Down) direction = 2;*/
         }
 
         private void Starten_Click(object sender, RoutedEventArgs e)
         {
-            if(stp_SideBar.Visibility == Visibility.Collapsed) stp_SideBar.Visibility = Visibility.Visible;
-            else stp_SideBar.Visibility = Visibility.Collapsed;
+            if (stp_SideBar.Visibility == Visibility.Collapsed) stp_SideBar.Visibility = Visibility.Visible;
+            else 
+            { 
+                stp_SideBar.Visibility = Visibility.Collapsed;
+                timer = new DispatcherTimer(DispatcherPriority.Render);
+                timer.Interval = TimeSpan.FromMilliseconds(300);
+                timer.Tick += Update;
+                timer.Start();
+            }
         }
     }
 }
